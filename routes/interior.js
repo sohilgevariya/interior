@@ -7,7 +7,7 @@ router.post('/getInfo', async(req, res, next) => {
         var record = await interiorSchema.find();
 
         if(record.length > 0){
-            res.status(200).json({ IsSuccess: true, Data: record, Message: 'Data found' });
+            res.status(200).json({ IsSuccess: true, count : record.length, Data: record, Message: 'Data found' });
         }else{
             res.status(200).json({ IsSuccess: false, Data: 0, Message: 'Data not found' });
         }
@@ -26,7 +26,7 @@ router.post('/addInfo', async(req, res, next) => {
         record.save();
 
         if(record){
-            res.status(200).json({ IsSuccess: true, Data: record, Message: 'Record Successfully inserted' });
+            res.status(200).json({ IsSuccess: true,  Data: record, Message: 'Record Successfully inserted' });
         }else{
             res.status(200).json({ IsSuccess: false, Data: 0, Message: 'Record not inserted' });
         }
