@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 var registerSchema = require('../model/register');
 
-router.get('/', async(req,res) => {
+router.post('/getdata', async(req,res) => {
     try{
         const record = await registerSchema.find();
         if(record){
