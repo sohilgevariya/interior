@@ -19,6 +19,16 @@ router.post('/getdata', async(req,res) => {
 router.post('/signin', async function(req, res, next) {
     const{ name, email, phone, password, profile} = req.body;
     try {
+      
+      var existphone = await registerSchema.aggregate([
+        {
+          $match: {phone: phone}
+        }
+      ]);
+
+      // console.log(existphone);
+      // console.log(existphone.length);
+
       var record = await new registerSchema({
         name: name,
         email: email,
@@ -27,19 +37,14 @@ router.post('/signin', async function(req, res, next) {
         profile: profile
       });
 
-        var existphone = await registerSchema.aggregate([{
-          $match: {phone: phone}
-        }]);
-
-        if(existphone){
+      if(existphone.length == 1){
         res.status(200).json({ IsSuccess: true, Message: 'mobile no. already registerd' });
-        }
-        else if(record){
-            record.save();
-            res.status(200).json({ IsSuccess: true,  Data: record, Message: 'Usser registered' });
-        }else{
-            res.status(200).json({ IsSuccess: false, Data: 0, Message: 'User not registered' });
-        }
+      }else if(record){
+        record.save();
+        res.status(200).json({ IsSuccess: true,  Data: record, Message: 'Usser registered' });
+      }else{
+        res.status(200).json({ IsSuccess: false, Data: 0, Message: 'User not registered' });
+      }
     } catch (error) {
       res.status(500).json({ IsSuccess: false, Message: error.message });
     }
